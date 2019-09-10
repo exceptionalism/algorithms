@@ -9,14 +9,14 @@ struct Node {
 };
 
 // HEAD of the list
-Node* HEAD = new Node();
+Node* HEAD = new(nothrow) Node();
 
 // Insert a data set into the list
 int insert(int val = 0, Node* s = HEAD, Node* m = HEAD->link) {
     if (s->value == -1) {
         s->prev = m;
         s->value = val;
-        s->link = new Node();
+        s->link = new(nothrow) Node();
         (s->link)->value = -1;
         return 1;
     } else {
