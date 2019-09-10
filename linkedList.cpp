@@ -38,6 +38,7 @@ bool dltItem(int x, Node* s = HEAD) {
         if (s->value == x) {
             (s->prev)->link = s->link;
             (s->link)->prev = s->prev;
+            delete s;
             return true;
         } else {
             dltItem(x, s->link);
