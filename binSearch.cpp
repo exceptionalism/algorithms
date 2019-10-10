@@ -6,7 +6,7 @@ int binSearch(int arr[], int bot, int top, int sFor, int& clock) {
     int mid = (top + bot)/2;
     if (top != bot) {
         if (arr[mid] == sFor)
-            return mid;
+            return (mid+1);
         else {
             if (sFor < arr[mid])
                 binSearch(arr, bot, mid, sFor, clock);
@@ -24,11 +24,11 @@ int main() {
     
     int step = 0;
 
-    cout << "Input number to search: ";
-    cin >> b;
-
     for (int i = 0; i < 10; i++)
         cout << a[i] << "\t";
+
+    cout << "\n\nInput number to search: ";
+    cin >> b;
 
     cout << endl << endl;
 
