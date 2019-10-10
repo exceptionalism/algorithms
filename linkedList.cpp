@@ -9,15 +9,20 @@ struct Node {
 };
 
 // HEAD of the list
-Node* HEAD = new(nothrow) Node();
+Node* HEAD = NULL;
 
 // Insert a data set into the list
-int insert(int val = 0, Node* s = HEAD, Node* m = HEAD->link) {
-    if (s->value == -1) {
-        s->prev = m;
-        s->value = val;
-        s->link = new(nothrow) Node();
-        (s->link)->value = -1;
+int insert(int val = 0, Node* s = HEAD, Node* m = (HEAD == NULL ? NULL : HEAD->link)) {
+    if (s == NULL) {
+        Node* n = new Node();
+        n->prev = m;
+        n->value = val;
+        n->link = NULL;
+        if (m == NULL) {
+            HEAD = n;
+        } else {
+            m->link = n;
+        }
         return 1;
     } else {
         insert(val, s->link, s);
@@ -26,32 +31,49 @@ int insert(int val = 0, Node* s = HEAD, Node* m = HEAD->link) {
 
 // Displays all the data in the list (latest first)
 void getAll(Node* s = HEAD) {
-    if (s->value != -1) {
+    if (s != NULL) {
         getAll(s->link);
         cout << s->value << "\t";
     }
 }
 
 // Deletes an specific item from the list
+// bool dltItem(int x, Node* s = HEAD) {
+//     if (s != NULL) {
+//         if (s->value == x) {
+//             (s->prev)->link = s->link;
+//             if (s->link != NULL)
+//                 (s->link)->prev = s->prev;
+//             delete s;
+//             return true;
+//         } else {
+//             dltItem(x, s->link);
+//         }
+//     } else
+//         return false;
+// }
 bool dltItem(int x, Node* s = HEAD) {
-    if (s->value != -1) {
-        if (s->value == x) {
+    if (s != NULL)
+        dltItem(x, s->link);
+    if (s != NULL && s->value == x) {
+        if (s->prev != NULL)
             (s->prev)->link = s->link;
+        else
+            HEAD = s->link;
+        if (s->link != NULL)
             (s->link)->prev = s->prev;
-            delete s;
-            return true;
-        } else {
-            dltItem(x, s->link);
-        }
-    } else
+        delete s;
+        return true;
+    } else {
         return false;
+    }
 }
+
 
 // Main program for the implementation of list
 int main() {
     // init list properly
-    HEAD->value = -1;
-    HEAD->prev = 0;
+    HEAD = NULL;
 
     // get data and enrich list
     int j = 0;
