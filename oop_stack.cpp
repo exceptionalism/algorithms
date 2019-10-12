@@ -2,7 +2,7 @@
 
 using namespace std;
 
-#define MAX 10
+#define MAX 5
 
 class Stack {
 private:
@@ -12,12 +12,12 @@ public:
     Stack(): tos(0) {}
 
     bool push(int x) {
-        if (tos <= MAX) {
+        if (tos < MAX) {
             stck[tos] = x;
             tos++;
             return true;
         } else
-            return false;
+            throw "Cannot push. Stack may be full.";
     }
     bool pop() {
         if (tos > 0) {
@@ -25,15 +25,14 @@ public:
             delete &stck[tos];
             return true;
         }
-        return false;
+        throw "Cannot pop. Stack may be empty";
     }
 
     int peek() {
         int x = tos - 1;
         if (x >= 0)
             return stck[x];
-        cout << "\nCannot peek. Stack may be empty.\n";
-        return 96;
+        throw "Cannot peek. Stack may be empty.";
     }
 
     bool isStackEmpty() {
@@ -57,13 +56,17 @@ int main() {
     int x = 0;
     Stack *st = new Stack();
 
-    cout << "Stack Empty: " << (st->isStackEmpty() ? "true" : "false") << endl;
-    cout << "Stack Full: " << (st->isStackFull() ? "true" : "false") << endl << endl;
-
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 6; i++) {        
+        cout << "Stack Empty: " << (st->isStackEmpty() ? "true" : "false") << endl;
+        cout << "Stack Full: " << (st->isStackFull() ? "true" : "false") << endl << endl;
         cout << "Enter a num: ";
         cin >> x;
-        st->push(x);
+        try {
+            st->push(x);
+            cout << endl;
+        } catch (const char* s) {
+            cout << "Error!\n" << s << endl << endl;
+        }
     }
 
     cout << "\nLatest stack: " << st->peek() << endl;
