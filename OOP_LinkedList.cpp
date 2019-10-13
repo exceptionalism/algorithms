@@ -28,7 +28,9 @@ public:
     * 
     * Null
     */
-    LinkedList(): Head(NULL) {}
+    LinkedList() {
+        Head = NULL;
+    }
     /*
     * Initialize a list with first node in the list
     * 
@@ -46,12 +48,14 @@ public:
     * @param {int} data - Value to be added in the list
     */
     bool insertNode(int data) {
-        Node* node = new Node;
-        node->value = data;
-        node->next = NULL;
-        if (!Head) {
-            Head = node;
+        if (Head == NULL) {
+            Head = new Node();
+            Head->value = data;
+            Head->next = NULL;
         } else {
+            Node* node = new Node;
+            node->value = data;
+            node->next = NULL;
             Node* curr;
             curr = Head;
             while(curr->next) {
@@ -102,11 +106,12 @@ public:
     */
     bool removeAt(int index) {
         Node* curr = Head;
-        int count = 0;
+        int count = -1;
         while (curr) {
             curr = curr->next;
             count++;
         }
+        cout << "Count: " << count << endl;
         curr = Head;
         if (index > 0 && index > count) {
             return 0;
@@ -128,12 +133,12 @@ public:
 };
 
 int main() {
-    LinkedList* l = new LinkedList();
+    LinkedList* l = new LinkedList;
     l->insertNode(200);
     l->insertNode(300);
     l->insertNode(400);
     // l->clearList();
-    l->removeAt(3);
+    l->removeAt(1);
     l->printList();
 
 
