@@ -1,6 +1,10 @@
 #include <iostream>
 using namespace std;
 
+
+
+
+
 /* 
  * LinkedList data structure
  * 
@@ -11,6 +15,10 @@ struct Node {
     int value;
     Node* next;
 };
+
+
+
+
 
 /*
  * Class representing a linked-list
@@ -66,41 +74,8 @@ public:
         return 1;
     }
 
-
     /*
-    * Clears the whole list
-    * 
-    * Null
-    */
-    bool clearList() {
-        Node* curr = Head;
-        Node* next;
-        Head = NULL;
-        while (curr) {
-            next = curr->next;
-            delete curr;
-            curr = next;
-        }
-        return 1;
-    }
-    
-    /*
-    * Print data in every node in the list
-    * 
-    * Null
-    */
-    void printList() {
-        Node* curr = Head;
-        while (curr) {
-            cout << curr->value << "\t";
-            curr = curr->next;
-        }
-        cout << endl;
-    }
-
-
-    /*
-    * Removes a node at specific position in the list
+    * Remove a node at specific position in the list
     * 
     * @param {int} index - Position from where the node should be removed in the list
     */
@@ -130,6 +105,38 @@ public:
         }
         return 1;
     }
+
+    /*
+    * Print data in every node in the list
+    * 
+    * Null
+    */
+    void printList() {
+        Node* curr = Head;
+        while (curr) {
+            cout << curr->value << "\t";
+            curr = curr->next;
+        }
+        cout << endl;
+    }
+
+    /*
+    * Clear the whole list
+    * 
+    * Null
+    */
+    bool clearList() {
+        Node* curr = Head;
+        Node* next;
+        Head = NULL;
+        while (curr) {
+            next = curr->next;
+            delete curr;
+            curr = next;
+        }
+        return 1;
+    }
+    
 };
 
 int main() {
@@ -140,9 +147,6 @@ int main() {
     // l->clearList();
     l->removeAt(1);
     l->printList();
-
-
-
 
     return 0;
 }
