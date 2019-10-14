@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-#define MAX 10
+#define MAX 3
 
 /*
  * Class representing a Queue
@@ -28,10 +28,16 @@ public:
             line[i] = 0;
     }
 
+    /*
+     * Check if the queue is full
+    */
     bool isFull() {
         return size == MAX;
     }
 
+    /*
+     * Check if the queue is empty 
+    */
     bool isEmpty() {
         return size == 0;
     }
@@ -81,6 +87,9 @@ int main() {
     try {
         q->enqueue(20);
         q->enqueue(30);
+        x = q->dequeue();
+        q->enqueue(40);
+        q->enqueue(50);
         x = q->dequeue();
         cout << "Dequeued: " << x << endl;
     } catch (const char* err) {
