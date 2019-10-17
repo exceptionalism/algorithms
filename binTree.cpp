@@ -29,11 +29,11 @@ private:
         if (t) {
             if (printAsc) {
                 printTree(t->left, printAsc);
-                cout << t->value << endl;
+                cout << t->value << "\t";
                 printTree(t->right, printAsc);
             } else {
                 printTree(t->right, printAsc);
-                cout << t->value << endl;
+                cout << t->value << "\t";
                 printTree(t->left, printAsc);
             }
         }
@@ -142,7 +142,8 @@ public:
         if (root)
             printTree(root, true);
         else
-            cout << "Tree is empty." << endl;
+            cout << "Tree is empty.";
+        cout << endl;
     }
     /*
      * Print the entire tree 
@@ -153,7 +154,8 @@ public:
         if (root)
             printTree(root, printAsc);
         else
-            cout << "Tree is empty." << endl;
+            cout << "Tree is empty.";
+        cout << endl;
     }
 
     /*
@@ -176,6 +178,15 @@ public:
         cout << "Left sub-tree's height: " << height(root->left) << endl;
         cout << "Right sub-tree's height: " << height(root->right) << endl;
    }
+    /*
+     * Checks whether the tree is height-balanced
+     * 
+     * Null 
+    */
+
+   bool isBalanced() {
+       return (height(root->left) - height(root->right) == 1 || height(root->left) == height(root->right) || height(root->left) - height(root->right) == -1);
+   }
 
     /*
      * Balances the tree based on its height
@@ -186,13 +197,11 @@ public:
         if (!root)
             return;
         else {
-            int lh = height(root->left), rh = height(root->right);
-            while (!(height(root->left) - height(root->right) == 1 || height(root->left) == height(root->right) || height(root->left) - height(root->right) == -1)) {
-                // Node* newPtr = (rh > lh) ? root->right : root->left;
-                // Node* freePtr = (rh > lh) ? newPtr->left : newPtr->right;
-
+            int lh = 0, rh = 0;
+            while (!isBalanced()) {
+                lh = height(root->left);
+                rh = height(root->right);
                 Node* newPtr = NULL;
-                Node* freePtr = NULL;
                 if (rh > lh) {
                     newPtr = root->right;
                     root->right = newPtr->left;
@@ -206,7 +215,6 @@ public:
             }
         }
     }
-
 };
 
 
@@ -234,7 +242,7 @@ int main() {
     cout << "BEFORE:" << endl;
     bt->compSize();
     bt->printTree();
-
+    cout << endl;
 
     bt->heightbalance();
 
