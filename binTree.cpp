@@ -20,7 +20,7 @@ private:
     Node* root;
 
     /*
-     * Print the entirity of the tree
+     * Print the entire the tree
      * 
      * @param {Node *} t - Pointer from where the tree should be printed
      * @param {bool} printAsc - Flag whether to print the tree in ascending or descending order
@@ -54,6 +54,20 @@ private:
         }
         delete t;
     }
+    /*
+     * Compute the height of the tree
+    */
+   int height(Node* t) {
+       if (t)
+           return 1 + (max(height(t->left), height(t->right)));
+        return 0;
+   }
+   /*
+    * Get the greater number between two integers
+    */
+   int max(int a, int b) {
+       return a > b ? a : b;
+   }
 public:
     BinaryTree() {
         root = NULL;
@@ -120,7 +134,7 @@ public:
 
     
     /*
-     * Print the entirety of the tree in ascending order 
+     * Print the entire tree in ascending order 
      * 
      * Null
     */
@@ -131,7 +145,7 @@ public:
             cout << "Tree is empty." << endl;
     }
     /*
-     * Print the entirety of the tree 
+     * Print the entire tree 
      * 
      * @param {bool} printAsc - Flag whether to print the tree in ascending order, or in descending order
     */
@@ -141,6 +155,58 @@ public:
         else
             cout << "Tree is empty." << endl;
     }
+
+    /*
+     * Get the height of the tree
+     * 
+     * Null 
+    */
+   int height() {
+       if (!root)
+        return 0;
+       return height(root);
+   }
+
+   /*
+    * Computes the size of root's each subtree 
+    * 
+    * Null
+    */
+   void compSize() {       
+        cout << "Left sub-tree's height: " << height(root->left) << endl;
+        cout << "Right sub-tree's height: " << height(root->right) << endl;
+   }
+
+    /*
+     * Balances the tree based on its height
+     * 
+     * Null
+     */
+    void heightbalance() {
+        if (!root)
+            return;
+        else {
+            int lh = height(root->left), rh = height(root->right);
+            while (!(height(root->left) - height(root->right) == 1 || height(root->left) == height(root->right) || height(root->left) - height(root->right) == -1)) {
+                // Node* newPtr = (rh > lh) ? root->right : root->left;
+                // Node* freePtr = (rh > lh) ? newPtr->left : newPtr->right;
+
+                Node* newPtr = NULL;
+                Node* freePtr = NULL;
+                if (rh > lh) {
+                    newPtr = root->right;
+                    root->right = newPtr->left;
+                    newPtr->left = root;
+                } else {
+                    newPtr = root->left;
+                    root->left = newPtr->right;
+                    newPtr->right = root;
+                }
+                root = newPtr;
+            }
+        }
+    }
+
 };
 
 
@@ -161,9 +227,20 @@ int main() {
     bt->addChild(14);
     bt->addChild(18);
     bt->addChild(17);
+    bt->addChild(16);
 
-    // bt->deleteTree();
 
+    // cout << "Height of the tree: " << bt->height() << endl;
+    cout << "BEFORE:" << endl;
+    bt->compSize();
+    bt->printTree();
+
+
+    bt->heightbalance();
+
+    cout << "AFTER:" << endl;
+    // cout << "Height of the tree: " << bt->height() << endl;
+    bt->compSize();
     bt->printTree();
 
     return 0;
