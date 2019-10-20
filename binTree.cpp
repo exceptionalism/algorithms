@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 /* 
@@ -39,7 +40,6 @@ private:
         }
     }
 
-
     /*
      * Delete the whole tree
      * 
@@ -47,31 +47,78 @@ private:
     */
     void deleteTree(Node* t) {
         while (t) {
-            cout << "deleting..." << endl;
             deleteTree(t->left);
             deleteTree(t->right);
             t = NULL;
         }
         delete t;
     }
+
     /*
      * Compute the height of the tree
     */
-   int height(Node* t) {
-       if (t)
-           return 1 + (max(height(t->left), height(t->right)));
+    int height(Node* t) {
+        if (t)
+            return 1 + (max(height(t->left), height(t->right)));
         return 0;
-   }
-   /*
+    }
+
+    /*
     * Get the greater number between two integers
     */
-   int max(int a, int b) {
-       return a > b ? a : b;
-   }
+    int max(int a, int b) {
+        return a > b ? a : b;
+    }
+
+    /*
+     * Computes the number of nodes on the tree
+    */
+    int size(Node* t) {
+        if (t)
+            return (1 + size(t->left) + size(t->right));
+        return 0;
+    }
+
+
+    /*
+     * Build a sorted dynamic array with all the nodes on the tree
+     * 
+     * @param {Node*} t - Node on the tree
+     * @param {vector<Node*>} nodes - Vector array(passed by reference) to be build
+    */
+    void getNodes(Node* t, vector<Node*> &nodes) {
+        if (!t) return;
+        getNodes(t->left, nodes);
+        nodes.push_back(t);
+        getNodes(t->right, nodes);
+    }
+
+
+    /*
+     * Build a tree from a sorted dynamic array
+     * 
+     * @param {vector<Node*>} nds - Vector array(passed by reference) to be build
+     * @param {int} st - Starting index of the vector
+     * @param {int} end - Ending index of the vector
+     * 
+     * @return {Node*} - pointer to the root node of the new tree
+    */
+    Node* buildTree(vector<Node*> nds, int st, int end) {
+        if (st > end) return NULL;
+        int mid = (st + end) / 2;
+        Node* rt = nds[mid];
+
+        rt->left = buildTree(nds, st, mid-1);
+        rt->right = buildTree(nds, mid+1, end);
+        return rt;
+    }
+
 public:
     BinaryTree() {
         root = NULL;
     }
+
+
     /*
      * Initiate a binary tree with root
      * 
@@ -82,6 +129,8 @@ public:
         root->value = data;
         root->left = root->right = NULL;
     }
+
+
     /*
      * Add an element as a child to the tree
      * 
@@ -116,10 +165,9 @@ public:
             prev->left = curr;
         else
             prev->right = curr;
-
-        // exit
         return;
     }
+
 
     /*
      * Delete the whole tree
@@ -128,7 +176,6 @@ public:
     */
     void deleteTree() {
         deleteTree(root);
-        cout << "Deletion complete." << endl;
         root = NULL;
     }
 
@@ -145,6 +192,8 @@ public:
             cout << "Tree is empty.";
         cout << endl;
     }
+
+
     /*
      * Print the entire tree 
      * 
@@ -158,62 +207,74 @@ public:
         cout << endl;
     }
 
+
     /*
      * Get the height of the tree
      * 
      * Null 
     */
-   int height() {
-       if (!root)
-        return 0;
-       return height(root);
-   }
+    int height() {
+        if (!root)
+            return 0;
+        return height(root);
+    }
 
-   /*
+
+    /*
+     * Get the number of nodes on the tree
+     * 
+     * Null 
+    */
+    int size() {
+            if (!root)
+                return 0;
+            return size(root);
+    }
+
+
+    /*
     * Computes the size of root's each subtree 
     * 
     * Null
     */
-   void compSize() {       
-        cout << "Left sub-tree's height: " << height(root->left) << endl;
-        cout << "Right sub-tree's height: " << height(root->right) << endl;
-   }
+    void compSize() {       
+        if (root) {
+            cout << " Left sub-tree's height: " << height(root->left) << endl;
+            cout << "Right sub-tree's height: " << height(root->right) << endl;
+        }
+    }
+
+
     /*
      * Checks whether the tree is height-balanced
      * 
      * Null 
     */
+    bool isBalanced() {
+        return (height(root->left) - height(root->right) == 1 || height(root->left) == height(root->right) || height(root->left) - height(root->right) == -1);
+    }
 
-   bool isBalanced() {
-       return (height(root->left) - height(root->right) == 1 || height(root->left) == height(root->right) || height(root->left) - height(root->right) == -1);
-   }
 
     /*
-     * Balances the tree based on its height
+     * Checks whether the sub-tree is height-balanced
      * 
-     * Null
-     */
-    void heightbalance() {
-        if (!root)
-            return;
-        else {
-            int lh = 0, rh = 0;
-            while (!isBalanced()) {
-                lh = height(root->left);
-                rh = height(root->right);
-                Node* newPtr = NULL;
-                if (rh > lh) {
-                    newPtr = root->right;
-                    root->right = newPtr->left;
-                    newPtr->left = root;
-                } else {
-                    newPtr = root->left;
-                    root->left = newPtr->right;
-                    newPtr->right = root;
-                }
-                root = newPtr;
-            }
-        }
+     * Null 
+    */
+    bool isBalanced(Node* t) {
+        return (height(t->left) - height(t->right) == 1 || height(t->left) == height(t->right) || height(t->left) - height(t->right) == -1);
+    }
+
+
+    /*
+    * Balances the tree on the basis of height
+    * 
+    */
+    void balanceTree() {
+        vector<Node*> nodes;
+        getNodes(root, nodes);
+        Node* newRoot = buildTree(nodes, 0, nodes.size() - 1);
+        deleteTree();
+        this->root = newRoot;
     }
 };
 
@@ -227,29 +288,34 @@ int main() {
     bt->addChild(6);
     bt->addChild(5);
     bt->addChild(3);
-    bt->addChild(10);
     bt->addChild(8);
     bt->addChild(1);
+    bt->addChild(10);
     bt->addChild(20);
     bt->addChild(19);
     bt->addChild(14);
     bt->addChild(18);
+    bt->addChild(15);
     bt->addChild(17);
+    bt->addChild(12);
+    bt->addChild(11);
+    bt->addChild(13);
     bt->addChild(16);
 
-
-    // cout << "Height of the tree: " << bt->height() << endl;
-    cout << "BEFORE:" << endl;
+    cout << " BEFORE:" << endl;
+    cout << "     Height of the tree: " << bt->height() << endl;
     bt->compSize();
     bt->printTree();
     cout << endl;
 
-    bt->heightbalance();
+    bt->balanceTree();
 
-    cout << "AFTER:" << endl;
-    // cout << "Height of the tree: " << bt->height() << endl;
+    cout << " AFTER:" << endl;
+    cout << "     Height of the tree: " << bt->height() << endl;
     bt->compSize();
     bt->printTree();
+
+    cout << endl << "No. of nodes on the tree: " << bt->size() << endl;
 
     return 0;
 }
