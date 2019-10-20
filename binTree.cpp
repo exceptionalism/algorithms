@@ -113,6 +113,27 @@ private:
         return rt;
     }
 
+    /*
+     * Traverse through the tree to check if the value exists
+     * 
+     * @param {Node*} t - Node from where the tree need to be traversed
+     * @param {int} sFor - Value to be searched for
+    */
+    void searchFor(Node* t, int sFor) {
+        if (!t) return;
+        if (t->value == sFor)
+            cout << sFor << " exists." << endl;
+        else {
+            if (sFor < t->value)
+                searchFor(t->left, sFor);
+            else
+                searchFor(t->right, sFor);
+        }
+    }
+
+
+
+    
 public:
     BinaryTree() {
         root = NULL;
@@ -258,7 +279,7 @@ public:
     /*
      * Checks whether the sub-tree is height-balanced
      * 
-     * Null 
+     * @param {Node*} t - Node in the tree from where the sub-tree starts
     */
     bool isBalanced(Node* t) {
         return (height(t->left) - height(t->right) == 1 || height(t->left) == height(t->right) || height(t->left) - height(t->right) == -1);
@@ -268,6 +289,7 @@ public:
     /*
     * Balances the tree on the basis of height
     * 
+    * Null
     */
     void balanceTree() {
         vector<Node*> nodes;
@@ -275,6 +297,16 @@ public:
         Node* newRoot = buildTree(nodes, 0, nodes.size() - 1);
         deleteTree();
         this->root = newRoot;
+    }
+
+    /*
+     * Search for a value in the tree
+     * 
+     * @param {int} sFor - Value to be searched for
+    */
+    void searchFor(int sFor) {
+        if (!root) return;
+        searchFor(root, sFor);
     }
 };
 
@@ -316,6 +348,8 @@ int main() {
     bt->printTree();
 
     cout << endl << "No. of nodes on the tree: " << bt->size() << endl;
+
+    bt->searchFor(212);
 
     return 0;
 }
