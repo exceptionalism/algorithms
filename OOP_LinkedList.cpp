@@ -55,11 +55,12 @@ public:
     * 
     * @param {int} data - Value to be added in the list
     */
-    bool insertNode(int data) {
+    Node* insertNode(int data) {
         if (Head == NULL) {
             Head = new Node();
             Head->value = data;
             Head->next = NULL;
+            return Head;
         } else {
             Node* node = new Node;
             node->value = data;
@@ -70,45 +71,55 @@ public:
                 curr = curr->next;
             }
             curr->next = node;
+            return node;
         }
-        return 1;
+    }
+
+    /*
+    * Remove a node with specific data in the list
+    * 
+    * @param {Node*} index - Position from where the node should be removed in the list
+    */
+    bool removeAt(Node* index) {
+        if (Head == index) {
+            Head = Head->next;
+            return 1;
+        }
+        Node* curr = Head;
+        while (curr) {
+            if (curr->next == index) {
+                curr->next = curr->next->next;
+                return 1;
+            }
+            curr=curr->next;
+        }
+        return 0;
     }
 
     /*
     * Remove a node at specific position in the list
     * 
-    * @param {int} index - Position from where the node should be removed in the list
+    * @param {int} value - Position from where the node should be removed in the list
     */
-    bool removeAt(int index) {
-        Node* curr = Head;
-        int count = -1;
-        while (curr) {
-            curr = curr->next;
-            count++;
-        }
-        cout << "Count: " << count << endl;
-        curr = Head;
-        if (index > 0 && index > count) {
-            return 0;
-        } else if (index == 0) {
+    bool removeAt(int value) {
+        if (Head->value == value) {
             Head = Head->next;
-            delete curr;
-        } else {
-            Node* prev;
-            count = 0;
-            while (count < index) {
-                count++;
-                prev = curr;
-                curr = curr->next;
-            }
-            prev->next = curr->next;
+            return 1;
         }
-        return 1;
+        Node* curr = Head;
+        while (curr->next) {
+            if (curr->next->value == value) {
+                curr->next = curr->next->next;
+                return 1;
+            }
+            curr = curr->next;
+        }
+        return 0;
     }
 
 
     /*
-    * Search for specified element in the list
+    * Search for specific element in the list
     * 
     * @param {int} searchItem - Item to be searched for in the list
     */
@@ -117,6 +128,7 @@ public:
         while (curr->next) {
             if (curr->value == searchItem)
                 return curr;
+            curr = curr->next;
         }
         return NULL;
     }
