@@ -67,9 +67,7 @@ public:
             node->next = NULL;
             Node* curr;
             curr = Head;
-            while(curr->next) {
-                curr = curr->next;
-            }
+            while(curr->next) curr = curr->next;
             curr->next = node;
             return node;
         }
@@ -87,6 +85,7 @@ public:
         }
         Node* curr = Head;
         while (curr) {
+            cout << curr << endl;
             if (curr->next == index) {
                 curr->next = curr->next->next;
                 return 1;
@@ -124,10 +123,10 @@ public:
     * @param {int} searchItem - Item to be searched for in the list
     */
     Node* searchFor(int searchItem) {
-        Node* curr = Head;
-        while (curr->next) {
-            if (curr->value == searchItem)
-                return curr;
+        if (Head->value == searchItem) return Head;
+        Node* curr = Head->next;
+        while (curr) {
+            if (curr->value == searchItem) return curr;
             curr = curr->next;
         }
         return NULL;
@@ -171,9 +170,12 @@ int main() {
     l->insertNode(200);
     l->insertNode(300);
     l->insertNode(400);
+    cout << "Address at: " << l->searchFor(200) << endl;
     cout << "Address at: " << l->searchFor(300) << endl;
+    cout << "Address at: " << l->searchFor(400) << endl;
+    l->removeAt(l->searchFor(400));
     // l->clearList();
-    l->removeAt(1);
+    l->removeAt(400);
     l->printList();
 
     return 0;
