@@ -106,6 +106,21 @@ public:
         return 1;
     }
 
+
+    /*
+    * Search for specified element in the list
+    * 
+    * @param {int} searchItem - Item to be searched for in the list
+    */
+    Node* searchFor(int searchItem) {
+        Node* curr = Head;
+        while (curr->next) {
+            if (curr->value == searchItem)
+                return curr;
+        }
+        return NULL;
+    }
+
     /*
     * Print data in every node in the list
     * 
@@ -144,6 +159,7 @@ int main() {
     l->insertNode(200);
     l->insertNode(300);
     l->insertNode(400);
+    cout << "Address at: " << l->searchFor(300) << endl;
     // l->clearList();
     l->removeAt(1);
     l->printList();
